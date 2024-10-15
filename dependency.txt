@@ -1,0 +1,2 @@
+%pip install -q "torch>=2.1" "torchvision" "transformers>=4.40" "protobuf>=3.20" "gradio>=4.26" "Pillow" "accelerate" "tqdm"  --extra-index-url https://download.pytorch.org/whl/cpu
+%pip install  -q "openvino>=2024.2.0" "nncf>=2.11.0"
