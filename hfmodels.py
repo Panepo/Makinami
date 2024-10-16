@@ -1,8 +1,7 @@
-from pathlib import Path
 from transformers import AutoModelForCausalLM
 from transformers import AutoProcessor
 
-model_dir = Path("models") / Path("Phi-3.5-vision-instruct") / "FP16"
+model_dir = "./models/Phi-3.5-vision-instruct/FP16"
 
 model = AutoModelForCausalLM.from_pretrained(
   model_dir,
