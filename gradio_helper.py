@@ -70,7 +70,7 @@ def make_demo(model, processor):
         prompt = processor.tokenizer.apply_chat_template(conversation, tokenize=False, add_generation_prompt=True)
         image = Image.open(image)
 
-        if backend == "openvino":
+        if backend == "openvino" or backend == "cpu":
           inputs = processor(prompt, image, return_tensors="pt")
         elif backend == "cuda":
           inputs = processor(prompt, image, return_tensors="pt").to("cuda:0")

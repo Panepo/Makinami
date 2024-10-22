@@ -10,7 +10,7 @@ backend = os.getenv("BACKEND")
 
 if backend == "openvino":
   from ovmodels import model, processor
-elif backend == "cuda":
+elif backend == "cuda" or backend == "cpu":
   from hfmodels import model, processor
 
 messages = [
@@ -21,7 +21,7 @@ prompt = processor.tokenizer.apply_chat_template(messages, tokenize=False, add_g
 start_time = time.process_time()
 image = Image.open("./1.jpg")
 
-if backend == "openvino":
+if backend == "openvino" or backend == "cpu":
   inputs = processor(prompt, [image], return_tensors="pt")
 elif backend == "cuda":
   inputs = processor(prompt, [image], return_tensors="pt").to("cuda:0")
