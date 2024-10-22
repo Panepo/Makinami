@@ -4,7 +4,11 @@ import gradio as gr
 from PIL import Image
 from threading import Thread
 from transformers import TextIteratorStreamer
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
+backend = os.getenv("BACKEND")
 
 def make_demo(model, processor):
     model_name = Path(model.config._name_or_path).parent.name
@@ -28,7 +32,7 @@ def make_demo(model, processor):
             if isinstance(files[-1], dict):
                 image = files[-1]["path"]
             else:
-                image = files[-1] if isinstance(files[-1], (list, tuple)) else files[-1].path
+                image = files[-1] if isinstance(files[-1], (list, tuple)) else files[-1]
         else:
             # if there's no image uploaded for this turn, look for images in the past turns
             # kept inside tuples, take the last one
@@ -65,7 +69,11 @@ def make_demo(model, processor):
         print(f"prompt is -\n{conversation}")
         prompt = processor.tokenizer.apply_chat_template(conversation, tokenize=False, add_generation_prompt=True)
         image = Image.open(image)
-        inputs = processor(prompt, image, return_tensors="pt")
+
+        if backend == "openvino":
+          inputs = processor(prompt, image, return_tensors="pt")
+        elif backend == "cuda":
+          inputs = processor(prompt, image, return_tensors="pt").to("cuda:0")
 
         streamer = TextIteratorStreamer(
             processor,
