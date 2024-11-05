@@ -6,6 +6,7 @@ import os
 load_dotenv()
 
 backend = os.getenv("BACKEND")
+bit4 = True if os.getenv("BIT4") == 'true' else False
 
 model_dir = "./models/Phi-3.5-vision-instruct/FP16"
 
@@ -13,6 +14,7 @@ if backend == "cuda":
   model = AutoModelForCausalLM.from_pretrained(
     model_dir,
     device_map="cuda",
+    load_in_4bit=bit4,
     trust_remote_code=True,
     torch_dtype="auto",
     _attn_implementation='flash_attention_2'
@@ -20,6 +22,7 @@ if backend == "cuda":
 elif backend == "cpu":
   model = AutoModelForCausalLM.from_pretrained(
     model_dir,
+    load_in_4bit=bit4,
     trust_remote_code=True,
     torch_dtype="auto",
     _attn_implementation='flash_attention_2'

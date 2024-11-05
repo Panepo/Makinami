@@ -74,6 +74,8 @@ def make_demo(model, processor):
           inputs = processor(prompt, image, return_tensors="pt")
         elif backend == "cuda":
           inputs = processor(prompt, image, return_tensors="pt").to("cuda:0")
+        else:
+          raise ValueError(f"Unknown backend: {backend}")
 
         streamer = TextIteratorStreamer(
             processor,
@@ -102,12 +104,12 @@ def make_demo(model, processor):
 
     demo = gr.ChatInterface(
         fn=bot_streaming,
-        title=f"{model_name} with OpenVINO",
+        title=f"{model_name}",
         examples=[
             {"text": "What is the text saying?", "files": ["./small.png"]},
             {"text": "What does the chart display?", "files": ["./chart.png"]},
         ],
-        description=f"Try the [{model_name} model](https://huggingface.co/microsoft/{model_name}) from Microsoft with OpenVINO. Upload an image and start chatting about it, or simply try one of the examples below. If you won't upload an image, you will receive an error.",
+        description=f"Try the [{model_name} model](https://huggingface.co/microsoft/{model_name}) from Microsoft. Upload an image and start chatting about it, or simply try one of the examples below. If you won't upload an image, you will receive an error.",
         stop_btn="Stop Generation",
         multimodal=True,
     )

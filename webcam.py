@@ -1,5 +1,5 @@
 from PIL import Image
-from ovmodels import model, processor
+from modelOV import model, processor
 from transformers import TextStreamer
 import cv2
 import math

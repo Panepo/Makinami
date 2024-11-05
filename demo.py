@@ -7,9 +7,11 @@ load_dotenv()
 backend = os.getenv("BACKEND")
 
 if backend == "openvino":
-  from ovmodels import model, processor
+  from modelOV import model, processor
 elif backend == "cuda":
-  from hfmodels import model, processor
+  from modelHF import model, processor
+else:
+  raise ValueError(f"Unknown backend: {backend}")
 
 demo = make_demo(model, processor)
 

@@ -9,9 +9,11 @@ load_dotenv()
 backend = os.getenv("BACKEND")
 
 if backend == "openvino":
-  from ovmodels import model, processor
+  from modelOV import model, processor
 elif backend == "cuda" or backend == "cpu":
-  from hfmodels import model, processor
+  from modelHF import model, processor
+else:
+  raise ValueError(f"Unknown backend: {backend}")
 
 messages = [
     {"role": "user", "content": "<|image_1|>\nWhat is unusual on this picture?"},
