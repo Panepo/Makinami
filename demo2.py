@@ -64,14 +64,13 @@ with gr.Blocks() as demo:
   with gr.Row():
     with gr.Column():
       img_input = gr.Image(label="camera", sources="webcam", streaming=True, type="pil")
+    with gr.Column():
       txt_input = gr.Textbox(label="Ask a question", lines=2)
       btn_input = gr.Button("Submit")
-    with gr.Column():
-      img_output = gr.Image(label="captured", type="pil")
       txt_output = gr.Textbox(label="LLM Anwsers", lines=2)
 
-  img_input.stream(fn_camera, img_input, img_output, stream_every=1)
-  btn_input.click(fn_llm, [img_output, txt_input], txt_output)
+  img_input.stream(fn_camera, img_input, img_input, stream_every=0.5, concurrency_limit=30)
+  btn_input.click(fn_llm, [img_input, txt_input], txt_output)
 
 if __name__ == "__main__":
   demo.launch()
