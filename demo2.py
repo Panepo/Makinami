@@ -20,7 +20,7 @@ else:
 model_name = Path(model.config._name_or_path).parent.name
 
 def fn_camera(image):
-  return image
+  return image.transpose(Image.FLIP_LEFT_RIGHT)
 
 def fn_llm(image, question):
   if image is None:
