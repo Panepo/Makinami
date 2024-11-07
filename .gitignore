@@ -156,3 +156,5 @@ cython_debug/
 models
 *.jpg
 *.png
+archive
+.gradio

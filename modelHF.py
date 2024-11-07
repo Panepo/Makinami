@@ -10,6 +10,7 @@ bit4 = True if os.getenv("BIT4") == 'true' else False
 
 model_dir = "./models/Phi-3.5-vision-instruct/FP16"
 
+# Note: set _attn_implementation='eager' if you don't have flash_attn installed
 if backend == "cuda":
   model = AutoModelForCausalLM.from_pretrained(
     model_dir,
