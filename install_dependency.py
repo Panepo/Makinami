@@ -27,21 +27,21 @@ def download_model(env):
   pip_install("protobuf>=3.20", "Pillow", "accelerate", "tqdm", "nncf>=2.11.0", "Requests", "numpy")
 
   if env == "openvino":
-    pip_uninstall("openvino", "openvino-tokenizers", "openvino_genai")
-    pip_install("-y", "openvino", "openvino-tokenizers", "openvino_genai")
+    pip_uninstall("openvino", "openvino-tokenizers", "openvino_genai", "-y")
+    pip_install("openvino", "openvino-tokenizers", "openvino_genai")
 
-    pip_uninstall("-y", "torch", "torchvision")
+    pip_uninstall("torch", "torchvision", "-y")
     pip_install("--extra-index-url", "https://download.pytorch.org/whl/cpu", "torch", "torchvision")
   elif env == "openvino-nightly":
-    pip_uninstall("-y", "openvino", "openvino-tokenizers", "openvino_genai")
+    pip_uninstall("openvino", "openvino-tokenizers", "openvino_genai", "-y")
     pip_install("--pre", "--extra-index-url", "https://storage.openvinotoolkit.org/simple/wheels/nightly", "openvino", "openvino-tokenizers", "openvino_genai")
 
-    pip_uninstall("-y", "torch", "torchvision")
+    pip_uninstall("torch", "torchvision", "-y")
     pip_install("--extra-index-url", "https://download.pytorch.org/whl/cpu", "torch", "torchvision")
   else:
-    pip_uninstall("-y", "openvino", "openvino-tokenizers", "openvino_genai")
+    pip_uninstall("openvino", "openvino-tokenizers", "openvino_genai", "-y")
 
-    pip_uninstall("-y", "torch", "torchvision")
+    pip_uninstall("torch", "torchvision", "-y")
     pip_install("--extra-index-url", "https://download.pytorch.org/whl/cu124", "torch", "torchvision")
 
 
