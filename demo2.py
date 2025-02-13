@@ -11,9 +11,9 @@ load_dotenv()
 backend = os.getenv("BACKEND")
 
 if backend == "openvino":
-  from modelOV import model, processor
+  from vlmOv import model, processor
 elif backend == "cuda" or backend == "cpu":
-  from modelHF import model, processor
+  from vlmHf import model, processor
 else:
   raise ValueError(f"Unknown backend: {backend}")
 
@@ -70,7 +70,8 @@ with gr.Blocks() as demo:
       txt_output = gr.Textbox(label="LLM Anwsers", lines=2)
 
   img_input.stream(fn_camera, img_input, img_input, stream_every=0.5, concurrency_limit=30)
-  btn_input.click(fn_llm, [img_input, txt_input], txt_output)
+  txt_input.submit(fn_llm, [img_input, txt_input], txt_output, queue=True)
+  btn_input.click(fn_llm, [img_input, txt_input], txt_output, queue=True)
 
 if __name__ == "__main__":
   demo.launch()

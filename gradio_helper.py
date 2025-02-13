@@ -89,7 +89,7 @@ def make_demo(model, processor):
             inputs,
             streamer=streamer,
             max_new_tokens=1024,
-            do_sample=False,
+            do_sample=True,
             temperature=0.0,
             eos_token_id=processor.tokenizer.eos_token_id,
         )
