@@ -14,10 +14,11 @@ if backend == "openvino":
   from vlmOv import model, processor
 elif backend == "cuda" or backend == "cpu":
   from vlmHf import model, processor
+elif backend == "optimum":
+  from vlmOptimum import model, processor
+  raise NotImplementedError("Optimum backend is not supported")
 else:
   raise ValueError(f"Unknown backend: {backend}")
-
-model_name = Path(model.config._name_or_path).parent.name
 
 def fn_camera(image):
   return image.transpose(Image.FLIP_LEFT_RIGHT)
@@ -35,6 +36,8 @@ def fn_llm(image, question):
       inputs = processor(prompt, [image], return_tensors="pt")
     elif backend == "cuda":
       inputs = processor(prompt, [image], return_tensors="pt").to("cuda:0")
+    elif backend == "optimum":
+      inputs = model.preprocess_inputs(text=prompt, image=image, processor=processor)
 
     streamer = TextIteratorStreamer(processor,
       **{
@@ -43,13 +46,31 @@ def fn_llm(image, question):
           "clean_up_tokenization_spaces": False,
       },
     )
-    generation_kwargs = dict(
-      inputs,
-      streamer=streamer,
-      max_new_tokens=1024,
-      do_sample=False,
-      eos_token_id=processor.tokenizer.eos_token_id,
-    )
+
+    if backend == "openvino" or backend == "cpu" or backend == "cuda":
+      generation_kwargs = dict(
+        inputs,
+        streamer=streamer,
+        max_new_tokens=1024,
+        do_sample=False,
+        eos_token_id=processor.tokenizer.eos_token_id,
+      )
+    elif backend == "optimum":
+      generation_kwargs = {
+        "max_new_tokens": 50,
+        "temperature": 0.0,
+        "do_sample": False,
+        "streamer": streamer,
+      }
+
+      generate_ids = model.generate(**inputs,
+        eos_token_id=processor.tokenizer.eos_token_id,
+        **generation_kwargs
+      )
+
+      generate_ids = generate_ids[:, inputs['input_ids'].shape[1]:]
+      response = processor.batch_decode(generate_ids, skip_special_tokens=True, clean_up_tokenization_spaces=False)[0]
+      return response
 
     thread = Thread(target=model.generate, kwargs=generation_kwargs)
     thread.start()

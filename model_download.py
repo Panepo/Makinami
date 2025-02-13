@@ -11,9 +11,9 @@ def download_model(env):
 
   target_dir = model_dir / model_path[env]
 
-  #if not target_dir.exists() and env == "openvino":
-  #  print("Downloading Phi-3.5 vision model for openvino...")
-  #  git_clone("https://huggingface.co/OpenVINO/Phi-3.5-vision-instruct-int4-ov", target_dir)
+  if not target_dir.exists() and env == "optimum":
+    print("Downloading Phi-3.5 vision model for optimum...")
+    git_clone("https://huggingface.co/OpenVINO/Phi-3.5-vision-instruct-int4-ov", target_dir)
 
   if not target_dir.exists() and env == "cuda":
     print("Downloading Phi-3.5 vision model for cuda...")

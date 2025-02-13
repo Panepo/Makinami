@@ -9,7 +9,8 @@ from pathlib import Path
 model_dir = Path("models")
 
 model_path = {
-  "openvino": "Phi-3.5-vision-instruct-int4-ov",
+  "openvino": "Phi-3.5-vision-instruct-int4-ov-legacy",
   "cuda": "Phi-3.5-vision-instruct",
-  "cpu": "Phi-3.5-vision-instruct"
+  "cpu": "Phi-3.5-vision-instruct",
+  "optimum": "Phi-3.5-vision-instruct-int4-ov",
 }

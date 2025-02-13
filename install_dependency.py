@@ -38,6 +38,10 @@ def download_model(env):
 
     pip_uninstall("torch", "torchvision", "-y")
     pip_install("--extra-index-url", "https://download.pytorch.org/whl/cpu", "torch", "torchvision")
+  elif env == "optimum":
+    pip_uninstall("openvino", "openvino-tokenizers", "openvino_genai", "-y")
+    pip_install("--pre", "-U", "--extra-index-url", "https://storage.openvinotoolkit.org/simple/wheels/pre-release", "openvino_tokenizers", "openvino")
+    pip_install("git+https://github.com/huggingface/optimum-intel.git")
   else:
     pip_uninstall("openvino", "openvino-tokenizers", "openvino_genai", "-y")
 
